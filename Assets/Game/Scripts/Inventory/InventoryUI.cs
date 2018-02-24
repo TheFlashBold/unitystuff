@@ -17,7 +17,7 @@ namespace Game.UI
         FallingFast = 6
     };
     #endregion
-
+    
     #region Status Indicators
     [System.Serializable]
     public struct StatusIndicators
@@ -119,10 +119,64 @@ namespace Game.UI
         #endregion
                 
         public StatusIndicators StatusIndicators;
-        
+
+        public GameObject PageGear;
+        public GameObject PageCrafting;
+
+        public GameObject GroundTabLeft;
+        public GameObject GroundTabRight;
+
+        public bool isOpen = false;
+
         private void Start()
         {
             StatusIndicators.SetTemp(100);
+        }
+
+        private void Update()
+        {
+            if (Input.GetButtonDown("Inventory"))
+            {
+                if (isOpen)
+                {
+                    Close();
+                }
+                else
+                {
+                    Open();
+                }
+            }
+        }
+
+        public void UIChangePage(int page)
+        {
+            switch (page)
+            {
+                case 0:
+                    PageGear.SetActive(true);
+                    PageCrafting.SetActive(false);
+                    break;
+                case 1:
+                    PageGear.SetActive(false);
+                    PageCrafting.SetActive(true);
+                    break;
+            }
+        }
+
+        public void UIChangeTab(bool side)
+        {
+
+        }
+
+
+        public void Close()
+        {
+            isOpen = false;
+        }
+
+        public void Open()
+        {
+            isOpen = true;
         }
     }
 }
