@@ -10,7 +10,7 @@ const koaBody = require('koa-body');
 router.post('/login', (ctx, next) => {
 	let auth = ctx.request.body.auth;
 	
-	if(auth && auth.username === "tycho" && password === "Tychoholzer1"){
+	if(auth && auth.username === "tycho" && password === "tycho"){
 		ctx.body = {
 			success: true
 		};
