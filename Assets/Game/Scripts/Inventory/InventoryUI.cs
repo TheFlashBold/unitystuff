@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Game;
 
 namespace Game.UI
 {
@@ -24,6 +25,41 @@ namespace Game.UI
     {
         public Sprite EmptySprite;
         public Sprite[] Arrows;
+        public void Init()
+        {
+            Health Health = Health.instance;
+            StatusIndicators SI = this;
+            Health.temp.onValueChangedCallback += delegate (float value) {
+                SI.SetTemp((int)value);
+            };
+            Health.temp.onArrowChangedCallback += delegate (int arrow)
+            {
+                SI.TempArrow.sprite = SI.Arrows[arrow];
+            };
+            Health.water.onValueChangedCallback += delegate (float value) {
+                SI.SetWater((int)value);
+            };
+            Health.water.onArrowChangedCallback += delegate (int arrow)
+            {
+                SI.WaterArrow.sprite = SI.Arrows[arrow];
+            };
+            Health.food.onValueChangedCallback += delegate (float value) {
+                SI.SetFood((int)value);
+            };
+            Health.food.onArrowChangedCallback += delegate (int arrow)
+            {
+                SI.FoodArrow.sprite = SI.Arrows[arrow];
+            };
+            Health.blood.onValueChangedCallback += delegate (float value) {
+                SI.SetBlood((int)(value/120));
+            };
+            Health.blood.onArrowChangedCallback += delegate (int arrow)
+            {
+                SI.BloodArrow.sprite = SI.Arrows[arrow];
+            };
+            SetBrokenBone(false);
+            SetSickness(false);
+        }
         #region Temp
         public Image Temp;
         public Image TempArrow;
@@ -62,7 +98,7 @@ namespace Game.UI
         #endregion
         #region Blood
         public Image Blood;
-        public Image BloodpArrow;
+        public Image BloodArrow;
         public Sprite[] BloodSprites;
         public void SetBlood(int amount)
         {
@@ -105,15 +141,23 @@ namespace Game.UI
     };
     #endregion
 
+    #region Crafting Indicatiors
+    [System.Serializable]
+    public struct CraftingIndicators
+    {
+
+    }
+    #endregion
+
     public class InventoryUI : MonoBehaviour
     {
         #region Singleton
 
-        public static InventoryUI Instance;
+        public static InventoryUI instance;
 
         private void Awake()
         {
-            Instance = this;
+            instance = this;
         }
 
         #endregion
@@ -130,7 +174,7 @@ namespace Game.UI
 
         private void Start()
         {
-            StatusIndicators.SetTemp(100);
+            StatusIndicators.Init();
         }
 
         private void Update()

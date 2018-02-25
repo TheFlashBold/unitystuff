@@ -539,6 +539,7 @@
     <Compile Include="Assets\314 Arts\MarsFPSKit\Unity Technologies\PostProcessing\Runtime\Utils\GraphicsUtils.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Unity Technologies\PostProcessing\Runtime\Utils\MaterialFactory.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Unity Technologies\PostProcessing\Runtime\Utils\RenderTextureFactory.cs" />
+    <Compile Include="Assets\Game\Scripts\Health.cs" />
     <Compile Include="Assets\Game\Scripts\Inventory\CraftingReceipt.cs" />
     <Compile Include="Assets\Game\Scripts\Inventory\Inventory.cs" />
     <Compile Include="Assets\Game\Scripts\Inventory\InventoryUI.cs" />

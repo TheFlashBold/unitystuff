@@ -9,7 +9,7 @@ class GrassSpawnerEditorWindow : EditorWindow
     [MenuItem("Dynamic Grass/Spawner")]
     public static void ShowWindow()
     {
-        GetWindow(typeof(GrassSpawnerEditorWindow));
+        GetWindow<GrassSpawnerEditorWindow>("Grass Spawner");
     }
 
     public GrassSpawnerEditorWindow Instance;
