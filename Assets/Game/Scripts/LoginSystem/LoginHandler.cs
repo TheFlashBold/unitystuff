@@ -35,7 +35,7 @@ public class LoginResponse
     public string session;
     public bool success;
     public string error;
-    public string data;
+    public UserData data;
 }
 
 /// <summary>
@@ -57,7 +57,7 @@ public class LoginHandler : MonoBehaviour {
     public RegisterComponents RegisterComponents;
 
     public static User CurrentUser;
-
+    
     #region Singleton
     public static LoginHandler instance;
 
@@ -66,7 +66,7 @@ public class LoginHandler : MonoBehaviour {
         instance = this;
     }
     #endregion
-
+    
     #region Register
     #region magic
     public void UISwitchToRegister()

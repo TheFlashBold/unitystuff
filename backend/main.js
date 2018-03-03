@@ -3,6 +3,7 @@ const Router = require('koa-router');
 const md5 = require('md5');
 const Promise = require('bluebird');
 const uuidv1 = require('uuid/v1');
+const socketio = require('socket.io');
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/unitybackend');
@@ -90,7 +91,7 @@ router.post('/login', (ctx, next) => {
         ctx.body = {
             id: user._id,
             session: session,
-            data: JSON.stringify(user.data),
+            data: user.data,
             success: true,
             error: ""
         };
@@ -128,4 +129,16 @@ app.use(koaBody());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.listen(5000);
+let http = app.listen(5000);
+
+/* Maybe for laterrrrr
+const io = socketio.listen(http);
+
+io.on('connection', socket => {
+    socket.emit('hi', 'test');
+    socket.on('hi', data => {
+        console.log(data);
+    });
+});
+
+*/

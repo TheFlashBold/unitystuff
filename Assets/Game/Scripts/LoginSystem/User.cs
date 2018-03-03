@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+#region Definitions
 [System.Serializable]
 public class SaveResponse
 {
@@ -16,6 +17,7 @@ public struct UserData
     public int Logins;
     public string ProfilePicture;
 }
+#endregion
 
 public class User {
     public string username;
@@ -28,15 +30,10 @@ public class User {
         this.username = username;
         id = response.id;
         session = response.session;
-        try
-        {
-            UserData = JsonUtility.FromJson<UserData>(response.data);
-        }
-        catch(System.Exception e)
-        {
-            Debug.Log("Loading user data failed, should not be happening.");
-        }
+        UserData = response.data;
     }
+
+    #region Save Data
 
     public void Save()
     {
@@ -72,4 +69,5 @@ public class User {
             }
         }
     }
+    #endregion
 }

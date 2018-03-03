@@ -814,7 +814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6259d684b23dda841b78dd67138abaad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: https://login.0zn.ch
+  BackendUrl: https://login.0zn.ch
   LoginComponents:
     UsernameInput: {fileID: 284410403}
     PasswordInput: {fileID: 2029756438}
