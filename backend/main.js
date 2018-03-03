@@ -20,6 +20,9 @@ const UserModel = mongoose.model('user', {
     session: {
         type: String
     },
+    project: {
+        type: String
+    },
     data: {
         type: mongoose.Schema.Types.Mixed
     }
@@ -48,7 +51,8 @@ router.post('/register', (ctx, next) => {
             console.log("register started");
             let user = new UserModel({
                 username: auth.username,
-                password: auth.password
+                password: auth.password,
+                project: auth.project || ""
             });
 
             return user.save().then(() => {
@@ -71,7 +75,16 @@ router.post('/register', (ctx, next) => {
 router.post('/login', (ctx, next) => {
 	let auth = ctx.request.body;
 
-    return UserModel.findOne({username: auth.username, password: auth.password}).exec().then(user => {
+	let query = {
+	    username: auth.username,
+        password: auth.password
+	};
+
+	if(auth.project){
+	    query.project = auth.project;
+    }
+
+    return UserModel.findOne(query).exec().then(user => {
         if(!user){
             console.log("No user found for '" + auth.username + "' '" + auth.password + "'");
             ctx.body = {

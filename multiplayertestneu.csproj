@@ -545,6 +545,7 @@
     <Compile Include="Assets\Game\Scripts\Inventory\InventoryUI.cs" />
     <Compile Include="Assets\Game\Scripts\Inventory\ItemData.cs" />
     <Compile Include="Assets\Game\Scripts\Inventory\ItemDefinitions.cs" />
+    <Compile Include="Assets\Game\Scripts\LevelLoader\LevelLoader.cs" />
     <Compile Include="Assets\Game\Scripts\LoginSystem\LoginHandler.cs" />
     <Compile Include="Assets\Game\Scripts\LoginSystem\User.cs" />
   </ItemGroup>

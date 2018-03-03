@@ -52,18 +52,20 @@ public class RegisterResponse
 public class LoginHandler : MonoBehaviour {
 
     public string BackendUrl = "https://login.0zn.ch";
+    public string Project = "default";
 
     public LoginComponents LoginComponents;
     public RegisterComponents RegisterComponents;
 
     public static User CurrentUser;
     
-    #region Singleton
+    #region Singleton & DontDestroy
     public static LoginHandler instance;
 
     private void Awake()
     {
         instance = this;
+        DontDestroyOnLoad(transform.gameObject);
     }
     #endregion
     
@@ -106,6 +108,7 @@ public class LoginHandler : MonoBehaviour {
         WWWForm form = new WWWForm();
         form.AddField("username", username);
         form.AddField("password", md5(password));
+        form.AddField("project", LoginHandler.instance.Project);
         form.AddField("passwordrepeat", md5(passwordrepeat));
 
         OnRegisterStart();
@@ -218,6 +221,7 @@ public class LoginHandler : MonoBehaviour {
         WWWForm form = new WWWForm();
         form.AddField("username", username);
         form.AddField("password", md5(password));
+        form.AddField("project", LoginHandler.instance.Project);
 
         OnLoginStart();
 
@@ -272,7 +276,7 @@ public class LoginHandler : MonoBehaviour {
     {
         LoginComponents.Text.text = "Login successful!";
         Debug.Log("success " + response.id + " " + response.success);
-        // Change Scene?
+        
     }
 
     /// <summary>

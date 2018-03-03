@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Game/LoginSystem/Login.unity
+    guid: d909dcb29200dba49ae1a497b96bbd2d
+  - enabled: 1
     path: Assets/314 Arts/MarsFPSKit/Scenes/MainMenu.unity
     guid: 57951bc520532a94ca97a7fbc6f49e08
   - enabled: 1
