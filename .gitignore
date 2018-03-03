@@ -268,3 +268,8 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+
+
+
+.idea

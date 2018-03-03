@@ -20,7 +20,7 @@ const UserModel = mongoose.model('user', {
         type: String
     },
     data: {
-        type: String
+        type: mongoose.Schema.Types.Mixed
     }
 });
 
@@ -51,7 +51,7 @@ router.post('/register', (ctx, next) => {
             });
 
             return user.save().then(() => {
-                ctx.body = {
+                return ctx.body = {
                     success: true,
                     error: ""
                 }
@@ -60,9 +60,9 @@ router.post('/register', (ctx, next) => {
     }
     else {
         console.log("register failed");
-        ctx.body = {
-            success: true,
-            error: ""
+        return ctx.body = {
+            success: false,
+            error: "register failed"
         }
     }
 });
@@ -90,11 +90,38 @@ router.post('/login', (ctx, next) => {
         ctx.body = {
             id: user._id,
             session: session,
-            data: user.data,
+            data: JSON.stringify(user.data),
             success: true,
             error: ""
         };
     });
+});
+
+router.post('/save', (ctx, next) => {
+    let auth = ctx.request.body;
+    if(auth.id && auth.session){
+        return UserModel.findOne({_id: mongoose.Types.ObjectId(auth.id), session: auth.session}).exec().then(user => {
+            if(user){
+                user.set('data', JSON.parse(auth.data));
+                user.markModified('data');
+                user.save();
+                return ctx.body = {
+                    success: true,
+                    error: ""
+                };
+            }
+            ctx.body = {
+                success: false,
+                error: "No user found."
+            }
+        });
+    }
+    else {
+        ctx.body = {
+            success: false,
+            error: ""
+        }
+    }
 });
 
 app.use(koaBody());

@@ -24,13 +24,40 @@ public struct RegisterComponents
 }
 #endregion
 
+#region Definitions
+/// <summary>
+/// LoginResponse object
+/// </summary>
+[System.Serializable]
+public class LoginResponse
+{
+    public string id;
+    public string session;
+    public bool success;
+    public string error;
+    public string data;
+}
+
+/// <summary>
+/// RegisterResponse object
+/// </summary>
+[System.Serializable]
+public class RegisterResponse
+{
+    public bool success;
+    public string error;
+}
+#endregion
+
 public class LoginHandler : MonoBehaviour {
 
-    public string url = "https://login.0zn.ch";
+    public string BackendUrl = "https://login.0zn.ch";
 
     public LoginComponents LoginComponents;
     public RegisterComponents RegisterComponents;
-    
+
+    public static User CurrentUser;
+
     #region Singleton
     public static LoginHandler instance;
 
@@ -41,7 +68,7 @@ public class LoginHandler : MonoBehaviour {
     #endregion
 
     #region Register
-
+    #region magic
     public void UISwitchToRegister()
     {
         LoginComponents.Window.SetActive(false);
@@ -83,7 +110,7 @@ public class LoginHandler : MonoBehaviour {
 
         OnRegisterStart();
 
-        using (UnityWebRequest www = UnityWebRequest.Post(url + "/register", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(BackendUrl + "/register", form))
         {
             yield return www.SendWebRequest();
 
@@ -113,7 +140,7 @@ public class LoginHandler : MonoBehaviour {
             }
         }
     }
-
+    #endregion
     /// <summary>
     /// Called when register starts
     /// </summary>
@@ -155,6 +182,7 @@ public class LoginHandler : MonoBehaviour {
     #endregion
 
     #region Login
+    #region magic
     public void UISwitchToLogin()
     {
         LoginComponents.Window.SetActive(true);
@@ -193,7 +221,7 @@ public class LoginHandler : MonoBehaviour {
 
         OnLoginStart();
 
-        using (UnityWebRequest www = UnityWebRequest.Post(url + "/login", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(BackendUrl + "/login", form))
         {
             yield return www.SendWebRequest();
 
@@ -209,6 +237,9 @@ public class LoginHandler : MonoBehaviour {
                     LoginResponse response = JsonUtility.FromJson<LoginResponse>(www.downloadHandler.text);
                     if (response.success)
                     {
+                        CurrentUser = new User(LoginComponents.UsernameInput.text, response);
+                        CurrentUser.UserData.Logins += 1;
+                        CurrentUser.Save();
                         OnLoginSuccess(response, www);
                     }
                     else
@@ -223,7 +254,7 @@ public class LoginHandler : MonoBehaviour {
             }
         }
     }
-    
+    #endregion
     /// <summary>
     /// Called when login starts
     /// </summary>
@@ -263,31 +294,13 @@ public class LoginHandler : MonoBehaviour {
         LoginComponents.Text.text = "Something really bad happened!";
     }
     #endregion
-
-    /// <summary>
-    /// LoginResponse object
-    /// </summary>
-    [System.Serializable]
-    public class LoginResponse
-    {
-        public string id;
-        public string session;
-        public bool success;
-        public string error;
-        public string data;
-    }
-
-    /// <summary>
-    /// RegisterResponse object
-    /// </summary>
-    [System.Serializable]
-    public class RegisterResponse
-    {
-        public bool success;
-        public string error;
-    }
-
+    
     #region Utils
+    /// <summary>
+    /// Generates MD5 from provided string
+    /// </summary>
+    /// <param name="strToEncrypt"></param>
+    /// <returns></returns>
     public string md5(string strToEncrypt)
     {
         System.Text.UTF8Encoding ue = new System.Text.UTF8Encoding();
@@ -304,6 +317,14 @@ public class LoginHandler : MonoBehaviour {
         }
 
         return hashString.PadLeft(32, '0');
+    }
+    /// <summary>
+    /// Crude invoke Coroutine form non Monobehaviour-Class hack :)
+    /// </summary>
+    /// <param name="c"></param>
+    public void RunCoroutine(IEnumerator c)
+    {
+        StartCoroutine(c);
     }
     #endregion
 }

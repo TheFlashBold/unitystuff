@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "multiplayertestneu", "multiplayertestneu.csproj", "{222F2A90-8AD1-A7DB-AEEC-EA9772C7ADE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "multiplayertestneu.Editor", "multiplayertestneu.Editor.csproj", "{D5A2A884-8A06-F1C1-3031-B497667C4CC4}"
