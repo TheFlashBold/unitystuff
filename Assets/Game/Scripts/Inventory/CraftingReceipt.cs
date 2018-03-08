@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace TheFlashBold.Inventory
 {
 
     [CreateAssetMenu(fileName = "Crafting Receipt", menuName = "Inventory/Receipt", order = 2)]

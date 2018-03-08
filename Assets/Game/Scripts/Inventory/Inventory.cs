@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+using TheFlashBold.LoginSystem;
+
+namespace TheFlashBold.Inventory
 {
 
     public class Inventory : MonoBehaviour

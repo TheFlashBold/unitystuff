@@ -5,379 +5,384 @@ using UnityEngine.UI;
 
 using Quobject.SocketIoClientDotNet.Client;
 
-#region Input Objects
-[System.Serializable]
-public struct LoginComponents
+namespace TheFlashBold.LoginSystem
 {
-    public InputField UsernameInput;
-    public InputField PasswordInput;
-    public Text Text;
-    public GameObject Window;
-}
 
-[System.Serializable]
-public struct RegisterComponents
-{
-    public InputField UsernameInput;
-    public InputField PasswordInput;
-    public InputField PasswordRepeatInput;
-    public Text Text;
-    public GameObject Window;
-}
-#endregion
-
-#region Definitions
-/// <summary>
-/// LoginResponse object
-/// </summary>
-[System.Serializable]
-public class LoginResponse
-{
-    public string id;
-    public string session;
-    public bool success;
-    public bool banned;
-    public string error;
-    public UserData data;
-}
-
-/// <summary>
-/// RegisterResponse object
-/// </summary>
-[System.Serializable]
-public class RegisterResponse
-{
-    public bool success;
-    public string error;
-}
-#endregion
-
-public class LoginHandler : MonoBehaviour {
-
-    public string BackendUrl = "https://login.0zn.ch";
-    public string Project = "default";
-
-    public LoginComponents LoginComponents;
-    public RegisterComponents RegisterComponents;
-
-    public static User CurrentUser;
-
-    #region Singleton, DontDestroy, Socket
-    private Socket socket;
-
-    public static LoginHandler instance;
-
-    private void Awake()
+    #region Input Objects
+    [System.Serializable]
+    public struct LoginComponents
     {
-        instance = this;
-        DontDestroyOnLoad(transform.gameObject);
-        socket = IO.Socket(BackendUrl);
+        public InputField UsernameInput;
+        public InputField PasswordInput;
+        public Text Text;
+        public GameObject Window;
     }
 
-    private void Start()
+    [System.Serializable]
+    public struct RegisterComponents
     {
-        socket.On(Socket.EVENT_CONNECT, () =>
-        {
-            socket.Emit("startup");
-        });
-
-        socket.On("annonuce", (data) =>
-        {
-            Debug.Log(data);
-        });
-
-        socket.On("kill_sockets", () =>
-        {
-            Debug.Log("Stopping Sockets");
-            socket.Disconnect();
-        });
-
+        public InputField UsernameInput;
+        public InputField PasswordInput;
+        public InputField PasswordRepeatInput;
+        public Text Text;
+        public GameObject Window;
     }
     #endregion
-    
-    #region Register
-    #region magic
-    public void UISwitchToRegister()
+
+    #region Definitions
+    /// <summary>
+    /// LoginResponse object
+    /// </summary>
+    [System.Serializable]
+    public class LoginResponse
     {
-        LoginComponents.Window.SetActive(false);
-        RegisterComponents.Window.SetActive(true);
+        public string id;
+        public string session;
+        public bool success;
+        public bool banned;
+        public string error;
+        public UserData data;
     }
 
     /// <summary>
-    /// Register method invoked from UI
+    /// RegisterResponse object
     /// </summary>
-    public void UIRegister()
+    [System.Serializable]
+    public class RegisterResponse
     {
-        Register(RegisterComponents.UsernameInput.text, RegisterComponents.PasswordInput.text, RegisterComponents.PasswordRepeatInput.text);
+        public bool success;
+        public string error;
     }
+    #endregion
 
-    /// <summary>
-    /// Invoke the registering process.
-    /// </summary>
-    /// <param name="username"></param>
-    /// <param name="password"></param>
-    /// <param name="passwordrepeat"></param>
-    public void Register(string username, string password, string passwordrepeat)
+    public class LoginHandler : MonoBehaviour
     {
-        StartCoroutine(postRegisterData(username, password, passwordrepeat));
-    }
 
-    /// <summary>
-    /// Send data to the server
-    /// </summary>
-    /// <param name="username"></param>
-    /// <param name="password"></param>
-    /// <param name="passwordrepeat"></param>
-    /// <returns></returns>
-    IEnumerator postRegisterData(string username, string password, string passwordrepeat)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("username", username);
-        form.AddField("password", md5(password));
-        form.AddField("project", Project);
-        form.AddField("passwordrepeat", md5(passwordrepeat));
+        public string BackendUrl = "https://login.0zn.ch";
+        public string Project = "default";
 
-        OnRegisterStart();
+        public LoginComponents LoginComponents;
+        public RegisterComponents RegisterComponents;
 
-        using (UnityWebRequest www = UnityWebRequest.Post(BackendUrl + "/register", form))
+        public static User CurrentUser;
+
+        #region Singleton, DontDestroy, Socket
+        private Socket socket;
+
+        public static LoginHandler instance;
+
+        private void Awake()
         {
-            yield return www.SendWebRequest();
+            instance = this;
+            DontDestroyOnLoad(transform.gameObject);
+            socket = IO.Socket(BackendUrl);
+        }
 
-            if (www.isNetworkError || www.isHttpError)
+        private void Start()
+        {
+            socket.On(Socket.EVENT_CONNECT, () =>
             {
-                OnRegisterError(www);
-                Debug.Log(www.error);
-            }
-            else
+                socket.Emit("startup");
+            });
+
+            socket.On("annonuce", (data) =>
             {
-                try
-                {
-                    RegisterResponse response = JsonUtility.FromJson<RegisterResponse>(www.downloadHandler.text);
-                    if (response.success)
-                    {
-                        OnRegisterSuccess(response, www);
-                    }
-                    else
-                    {
-                        OnRegisterFailure(response.error, response, www);
-                    }
-                }
-                catch (System.Exception e)
+                Debug.Log(data);
+            });
+
+            socket.On("kill_sockets", () =>
+            {
+                Debug.Log("Stopping Sockets");
+                socket.Disconnect();
+            });
+
+        }
+        #endregion
+
+        #region Register
+        #region magic
+        public void UISwitchToRegister()
+        {
+            LoginComponents.Window.SetActive(false);
+            RegisterComponents.Window.SetActive(true);
+        }
+
+        /// <summary>
+        /// Register method invoked from UI
+        /// </summary>
+        public void UIRegister()
+        {
+            Register(RegisterComponents.UsernameInput.text, RegisterComponents.PasswordInput.text, RegisterComponents.PasswordRepeatInput.text);
+        }
+
+        /// <summary>
+        /// Invoke the registering process.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="passwordrepeat"></param>
+        public void Register(string username, string password, string passwordrepeat)
+        {
+            StartCoroutine(postRegisterData(username, password, passwordrepeat));
+        }
+
+        /// <summary>
+        /// Send data to the server
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="passwordrepeat"></param>
+        /// <returns></returns>
+        IEnumerator postRegisterData(string username, string password, string passwordrepeat)
+        {
+            WWWForm form = new WWWForm();
+            form.AddField("username", username);
+            form.AddField("password", md5(password));
+            form.AddField("project", Project);
+            form.AddField("passwordrepeat", md5(passwordrepeat));
+
+            OnRegisterStart();
+
+            using (UnityWebRequest www = UnityWebRequest.Post(BackendUrl + "/register", form))
+            {
+                yield return www.SendWebRequest();
+
+                if (www.isNetworkError || www.isHttpError)
                 {
                     OnRegisterError(www);
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    try
+                    {
+                        RegisterResponse response = JsonUtility.FromJson<RegisterResponse>(www.downloadHandler.text);
+                        if (response.success)
+                        {
+                            OnRegisterSuccess(response, www);
+                        }
+                        else
+                        {
+                            OnRegisterFailure(response.error, response, www);
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        OnRegisterError(www);
+                    }
                 }
             }
         }
-    }
-    #endregion
-    /// <summary>
-    /// Called when register starts
-    /// </summary>
-    private void OnRegisterStart()
-    {
-        RegisterComponents.Text.text = "Registering!";
-    }
-
-    /// <summary>
-    /// Called when register succeeded
-    /// </summary>
-    /// <param name="www"></param>
-    /// <param name="response"></param>
-    private void OnRegisterSuccess(RegisterResponse response, UnityWebRequest www)
-    {
-        RegisterComponents.Text.text = "Register successful!";
-        Debug.Log("success " + response.success);
-        EmitEvent("register", RegisterComponents.UsernameInput.text);
-    }
-
-    /// <summary>
-    /// Called when register fails (user already exists)
-    /// </summary>
-    /// <param name="www"></param>
-    private void OnRegisterFailure(string error, RegisterResponse response, UnityWebRequest www)
-    {
-        RegisterComponents.Text.text = "User already exists!";
-        Debug.Log("user already exists");
-    }
-
-    /// <summary>
-    /// Called when register errors hard
-    /// </summary>
-    /// <param name="www"></param>
-    private void OnRegisterError(UnityWebRequest www)
-    {
-        RegisterComponents.Text.text = "Something really bad happened!";
-    }
-
-    #endregion
-
-    #region Login
-    #region magic
-    public void UISwitchToLogin()
-    {
-        LoginComponents.Window.SetActive(true);
-        RegisterComponents.Window.SetActive(false);
-    }
-
-    /// <summary>
-    /// Login method invoked from UI
-    /// </summary>
-    public void UILogin()
-    {
-        Login(LoginComponents.UsernameInput.text, LoginComponents.PasswordInput.text);
-    }
-
-    /// <summary>
-    /// Invoke the login process.
-    /// </summary>
-    /// <param name="username">The username</param>
-    /// <param name="password">The password</param>
-    public void Login(string username, string password)
-    {
-        StartCoroutine(postLoginData(username, password));
-    }
-
-    /// <summary>
-    /// Send the data to the server.
-    /// </summary>
-    /// <param name="username"></param>
-    /// <param name="password"></param>
-    /// <returns></returns>
-    IEnumerator postLoginData(string username, string password)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("username", username);
-        form.AddField("password", md5(password));
-        form.AddField("project", Project);
-
-        OnLoginStart();
-
-        using (UnityWebRequest www = UnityWebRequest.Post(BackendUrl + "/login", form))
+        #endregion
+        /// <summary>
+        /// Called when register starts
+        /// </summary>
+        private void OnRegisterStart()
         {
-            yield return www.SendWebRequest();
+            RegisterComponents.Text.text = "Registering!";
+        }
 
-            if (www.isNetworkError || www.isHttpError)
+        /// <summary>
+        /// Called when register succeeded
+        /// </summary>
+        /// <param name="www"></param>
+        /// <param name="response"></param>
+        private void OnRegisterSuccess(RegisterResponse response, UnityWebRequest www)
+        {
+            RegisterComponents.Text.text = "Register successful!";
+            Debug.Log("success " + response.success);
+            EmitEvent("register", RegisterComponents.UsernameInput.text);
+        }
+
+        /// <summary>
+        /// Called when register fails (user already exists)
+        /// </summary>
+        /// <param name="www"></param>
+        private void OnRegisterFailure(string error, RegisterResponse response, UnityWebRequest www)
+        {
+            RegisterComponents.Text.text = "User already exists!";
+            Debug.Log("user already exists");
+        }
+
+        /// <summary>
+        /// Called when register errors hard
+        /// </summary>
+        /// <param name="www"></param>
+        private void OnRegisterError(UnityWebRequest www)
+        {
+            RegisterComponents.Text.text = "Something really bad happened!";
+        }
+
+        #endregion
+
+        #region Login
+        #region magic
+        public void UISwitchToLogin()
+        {
+            LoginComponents.Window.SetActive(true);
+            RegisterComponents.Window.SetActive(false);
+        }
+
+        /// <summary>
+        /// Login method invoked from UI
+        /// </summary>
+        public void UILogin()
+        {
+            Login(LoginComponents.UsernameInput.text, LoginComponents.PasswordInput.text);
+        }
+
+        /// <summary>
+        /// Invoke the login process.
+        /// </summary>
+        /// <param name="username">The username</param>
+        /// <param name="password">The password</param>
+        public void Login(string username, string password)
+        {
+            StartCoroutine(postLoginData(username, password));
+        }
+
+        /// <summary>
+        /// Send the data to the server.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        IEnumerator postLoginData(string username, string password)
+        {
+            WWWForm form = new WWWForm();
+            form.AddField("username", username);
+            form.AddField("password", md5(password));
+            form.AddField("project", Project);
+
+            OnLoginStart();
+
+            using (UnityWebRequest www = UnityWebRequest.Post(BackendUrl + "/login", form))
             {
-                OnLoginError(www);
-                Debug.Log(www.error);
-            }
-            else
-            {
-                try
-                {
-                    LoginResponse response = JsonUtility.FromJson<LoginResponse>(www.downloadHandler.text);
-                    if (response.success && !response.banned)
-                    {
-                        CurrentUser = new User(LoginComponents.UsernameInput.text, response);
-                        OnLoginSuccess(response, www);
-                    }
-                    else if(!response.success)
-                    {
-                        OnLoginFailure(response.error, response, www);
-                    }
-                    else if (response.banned)
-                    {
-                        OnLoginFailure(response.error, response, www);
-                    }
-                }
-                catch (System.Exception e)
+                yield return www.SendWebRequest();
+
+                if (www.isNetworkError || www.isHttpError)
                 {
                     OnLoginError(www);
-                }                
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    try
+                    {
+                        LoginResponse response = JsonUtility.FromJson<LoginResponse>(www.downloadHandler.text);
+                        if (response.success && !response.banned)
+                        {
+                            CurrentUser = new User(LoginComponents.UsernameInput.text, response);
+                            OnLoginSuccess(response, www);
+                        }
+                        else if (!response.success)
+                        {
+                            OnLoginFailure(response.error, response, www);
+                        }
+                        else if (response.banned)
+                        {
+                            OnLoginFailure(response.error, response, www);
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        OnLoginError(www);
+                    }
+                }
             }
         }
-    }
-    #endregion
-    /// <summary>
-    /// Called when login starts
-    /// </summary>
-    private void OnLoginStart()
-    {
-        LoginComponents.Text.text = "Logging in!";
-    }
-
-    /// <summary>
-    /// Called when login succeeded
-    /// </summary>
-    /// <param name="www"></param>
-    /// <param name="response"></param>
-    private void OnLoginSuccess(LoginResponse response, UnityWebRequest www)
-    {
-        LoginComponents.Text.text = "Login successful!";
-        Debug.Log("success " + response.id + " " + response.success);
-
-        CurrentUser.UserData.Logins += 1;
-        CurrentUser.Save();
-
-        EmitEvent("login", LoginComponents.UsernameInput.text);
-    }
-
-    /// <summary>
-    /// Called when login fails (wrong password / user doesn't exist)
-    /// </summary>
-    /// <param name="www"></param>
-    private void OnLoginFailure(string error, LoginResponse response, UnityWebRequest www)
-    {
-        LoginComponents.Text.text = error;
-        Debug.Log("wrong password");
-    }
-
-    /// <summary>
-    /// Called when login errors hard
-    /// </summary>
-    /// <param name="www"></param>
-    private void OnLoginError(UnityWebRequest www)
-    {
-        LoginComponents.Text.text = "Something really bad happened!";
-    }
-    #endregion
-
-    #region Events
-    public void EmitEvent(string name, params object[] args)
-    {
-        socket.Emit(name, args);
-    }
-
-    public void HandleEvent(string name, System.Action<object> fn)
-    {
-        socket.On(name, fn);
-    }
-    public void HandleEvent(string name, System.Action fn)
-    {
-        socket.On(name, fn);
-    }
-    #endregion
-
-    #region Utils
-    /// <summary>
-    /// Generates MD5 from provided string
-    /// </summary>
-    /// <param name="strToEncrypt"></param>
-    /// <returns></returns>
-    public string md5(string strToEncrypt)
-    {
-        System.Text.UTF8Encoding ue = new System.Text.UTF8Encoding();
-        byte[] bytes = ue.GetBytes(strToEncrypt);
-        
-        System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-        byte[] hashBytes = md5.ComputeHash(bytes);
-        
-        string hashString = "";
-
-        for (int i = 0; i < hashBytes.Length; i++)
+        #endregion
+        /// <summary>
+        /// Called when login starts
+        /// </summary>
+        private void OnLoginStart()
         {
-            hashString += System.Convert.ToString(hashBytes[i], 16).PadLeft(2, '0');
+            LoginComponents.Text.text = "Logging in!";
         }
 
-        return hashString.PadLeft(32, '0');
+        /// <summary>
+        /// Called when login succeeded
+        /// </summary>
+        /// <param name="www"></param>
+        /// <param name="response"></param>
+        private void OnLoginSuccess(LoginResponse response, UnityWebRequest www)
+        {
+            LoginComponents.Text.text = "Login successful!";
+            Debug.Log("success " + response.id + " " + response.success);
+
+            CurrentUser.UserData.Logins += 1;
+            CurrentUser.Save();
+
+            EmitEvent("login", LoginComponents.UsernameInput.text);
+        }
+
+        /// <summary>
+        /// Called when login fails (wrong password / user doesn't exist)
+        /// </summary>
+        /// <param name="www"></param>
+        private void OnLoginFailure(string error, LoginResponse response, UnityWebRequest www)
+        {
+            LoginComponents.Text.text = error;
+            Debug.Log("wrong password");
+        }
+
+        /// <summary>
+        /// Called when login errors hard
+        /// </summary>
+        /// <param name="www"></param>
+        private void OnLoginError(UnityWebRequest www)
+        {
+            LoginComponents.Text.text = "Something really bad happened!";
+        }
+        #endregion
+
+        #region Events
+        public void EmitEvent(string name, params object[] args)
+        {
+            socket.Emit(name, args);
+        }
+
+        public void HandleEvent(string name, System.Action<object> fn)
+        {
+            socket.On(name, fn);
+        }
+        public void HandleEvent(string name, System.Action fn)
+        {
+            socket.On(name, fn);
+        }
+        #endregion
+
+        #region Utils
+        /// <summary>
+        /// Generates MD5 from provided string
+        /// </summary>
+        /// <param name="strToEncrypt"></param>
+        /// <returns></returns>
+        public string md5(string strToEncrypt)
+        {
+            System.Text.UTF8Encoding ue = new System.Text.UTF8Encoding();
+            byte[] bytes = ue.GetBytes(strToEncrypt);
+
+            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] hashBytes = md5.ComputeHash(bytes);
+
+            string hashString = "";
+
+            for (int i = 0; i < hashBytes.Length; i++)
+            {
+                hashString += System.Convert.ToString(hashBytes[i], 16).PadLeft(2, '0');
+            }
+
+            return hashString.PadLeft(32, '0');
+        }
+        /// <summary>
+        /// Crude invoke Coroutine form non Monobehaviour-Class hack :)
+        /// </summary>
+        /// <param name="c"></param>
+        public static void RunCoroutine(IEnumerator c)
+        {
+            instance.StartCoroutine(c);
+        }
+        #endregion
     }
-    /// <summary>
-    /// Crude invoke Coroutine form non Monobehaviour-Class hack :)
-    /// </summary>
-    /// <param name="c"></param>
-    public static void RunCoroutine(IEnumerator c)
-    {
-        instance.StartCoroutine(c);
-    }
-    #endregion
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Game;
 
-namespace Game.UI
+namespace TheFlashBold.Inventory.UI
 {
     #region Declarations
     public enum UIArrows

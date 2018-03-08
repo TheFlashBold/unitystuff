@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 
-namespace Game
+namespace TheFlashBold.Inventory
 {
 
     [CustomEditor(typeof(ItemData))]

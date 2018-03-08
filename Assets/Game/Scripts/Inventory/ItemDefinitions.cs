@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Game
+namespace TheFlashBold.Inventory
 {
 
     [System.Serializable]
