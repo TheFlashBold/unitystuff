@@ -19,6 +19,8 @@ namespace Game
         public LootType LootType;
         public SpawnChance SpawnChance;
 
+        public ItemType ItemType;
+
         public float WeightDry;
         public float WeightWet;
     }

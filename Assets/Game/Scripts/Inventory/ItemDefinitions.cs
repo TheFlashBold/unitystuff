@@ -20,13 +20,14 @@ namespace Game
 
     public enum ItemType
     {
-        Weapon,
-        Tool,
-        Gear,
-        Clothing,
-        Buildable,
-        Interactable,
-        Useable
+        Default = 0,
+        Weapon = 1,
+        Tool = 2,
+        Gear = 4,
+        Clothing = 8,
+        Buildable = 16,
+        Interactable = 32,
+        Useable = 64
     };
 
     public enum ItemQuality

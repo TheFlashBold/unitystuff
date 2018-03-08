@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
+using Quobject.SocketIoClientDotNet.Client;
+
 #region Input Objects
 [System.Serializable]
 public struct LoginComponents
@@ -34,6 +36,7 @@ public class LoginResponse
     public string id;
     public string session;
     public bool success;
+    public bool banned;
     public string error;
     public UserData data;
 }
@@ -58,14 +61,37 @@ public class LoginHandler : MonoBehaviour {
     public RegisterComponents RegisterComponents;
 
     public static User CurrentUser;
-    
-    #region Singleton & DontDestroy
+
+    #region Singleton, DontDestroy, Socket
+    private Socket socket;
+
     public static LoginHandler instance;
 
     private void Awake()
     {
         instance = this;
         DontDestroyOnLoad(transform.gameObject);
+        socket = IO.Socket(BackendUrl);
+    }
+
+    private void Start()
+    {
+        socket.On(Socket.EVENT_CONNECT, () =>
+        {
+            socket.Emit("startup");
+        });
+
+        socket.On("annonuce", (data) =>
+        {
+            Debug.Log(data);
+        });
+
+        socket.On("kill_sockets", () =>
+        {
+            Debug.Log("Stopping Sockets");
+            socket.Disconnect();
+        });
+
     }
     #endregion
     
@@ -108,7 +134,7 @@ public class LoginHandler : MonoBehaviour {
         WWWForm form = new WWWForm();
         form.AddField("username", username);
         form.AddField("password", md5(password));
-        form.AddField("project", LoginHandler.instance.Project);
+        form.AddField("project", Project);
         form.AddField("passwordrepeat", md5(passwordrepeat));
 
         OnRegisterStart();
@@ -161,6 +187,7 @@ public class LoginHandler : MonoBehaviour {
     {
         RegisterComponents.Text.text = "Register successful!";
         Debug.Log("success " + response.success);
+        EmitEvent("register", RegisterComponents.UsernameInput.text);
     }
 
     /// <summary>
@@ -221,7 +248,7 @@ public class LoginHandler : MonoBehaviour {
         WWWForm form = new WWWForm();
         form.AddField("username", username);
         form.AddField("password", md5(password));
-        form.AddField("project", LoginHandler.instance.Project);
+        form.AddField("project", Project);
 
         OnLoginStart();
 
@@ -239,14 +266,16 @@ public class LoginHandler : MonoBehaviour {
                 try
                 {
                     LoginResponse response = JsonUtility.FromJson<LoginResponse>(www.downloadHandler.text);
-                    if (response.success)
+                    if (response.success && !response.banned)
                     {
                         CurrentUser = new User(LoginComponents.UsernameInput.text, response);
-                        CurrentUser.UserData.Logins += 1;
-                        CurrentUser.Save();
                         OnLoginSuccess(response, www);
                     }
-                    else
+                    else if(!response.success)
+                    {
+                        OnLoginFailure(response.error, response, www);
+                    }
+                    else if (response.banned)
                     {
                         OnLoginFailure(response.error, response, www);
                     }
@@ -276,7 +305,11 @@ public class LoginHandler : MonoBehaviour {
     {
         LoginComponents.Text.text = "Login successful!";
         Debug.Log("success " + response.id + " " + response.success);
-        
+
+        CurrentUser.UserData.Logins += 1;
+        CurrentUser.Save();
+
+        EmitEvent("login", LoginComponents.UsernameInput.text);
     }
 
     /// <summary>
@@ -285,7 +318,7 @@ public class LoginHandler : MonoBehaviour {
     /// <param name="www"></param>
     private void OnLoginFailure(string error, LoginResponse response, UnityWebRequest www)
     {
-        LoginComponents.Text.text = "Wrong username / password";
+        LoginComponents.Text.text = error;
         Debug.Log("wrong password");
     }
 
@@ -298,7 +331,23 @@ public class LoginHandler : MonoBehaviour {
         LoginComponents.Text.text = "Something really bad happened!";
     }
     #endregion
-    
+
+    #region Events
+    public void EmitEvent(string name, params object[] args)
+    {
+        socket.Emit(name, args);
+    }
+
+    public void HandleEvent(string name, System.Action<object> fn)
+    {
+        socket.On(name, fn);
+    }
+    public void HandleEvent(string name, System.Action fn)
+    {
+        socket.On(name, fn);
+    }
+    #endregion
+
     #region Utils
     /// <summary>
     /// Generates MD5 from provided string
@@ -326,9 +375,9 @@ public class LoginHandler : MonoBehaviour {
     /// Crude invoke Coroutine form non Monobehaviour-Class hack :)
     /// </summary>
     /// <param name="c"></param>
-    public void RunCoroutine(IEnumerator c)
+    public static void RunCoroutine(IEnumerator c)
     {
-        StartCoroutine(c);
+        instance.StartCoroutine(c);
     }
     #endregion
 }

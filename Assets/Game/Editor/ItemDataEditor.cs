@@ -35,6 +35,7 @@ namespace Game
                 myTarget.Description = EditorGUILayout.TextArea(myTarget.Description, GUILayout.Height(50));
 
                 myTarget.Icon = (Sprite)EditorGUILayout.ObjectField("Icon", myTarget.Icon, typeof(Sprite), allowSceneObjects: true);
+                myTarget.ItemType = (ItemType)EditorGUILayout.EnumMaskPopup("Type", myTarget.ItemType);
                 EditorGUILayout.Space();
             }
             showModelInfo = EditorGUILayout.Foldout(showModelInfo, "Model Info");

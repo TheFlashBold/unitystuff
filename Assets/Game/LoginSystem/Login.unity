@@ -815,6 +815,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackendUrl: https://login.0zn.ch
+  Project: default
   LoginComponents:
     UsernameInput: {fileID: 284410403}
     PasswordInput: {fileID: 2029756438}

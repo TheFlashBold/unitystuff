@@ -20,7 +20,13 @@ const UserModel = mongoose.model('user', {
     session: {
         type: String
     },
+    friends: [{
+        type: mongoose.Schema.Types.ObjectId
+    }],
     project: {
+        type: String
+    },
+    banned: {
         type: String
     },
     data: {
@@ -35,7 +41,39 @@ let router = new Router();
 const koaBody = require('koa-body');
 
 router.get('/', (ctx, next) => {
-	ctx.body = "yeeeh";
+	ctx.body = `
+	<html>
+        <head>
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+            <script>
+            
+                var getTime = () => {
+                    var currentdate = new Date(); 
+                    return currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+                };
+            
+                var socket = io();
+                
+                socket.on('annonuce', msg => {
+                    $('#blah').prepend('<li>[' + getTime() + '] ' + msg + '</li>');
+                });
+                
+                socket.on('login', msg => {
+                    $('#blah').prepend('<li>[' + getTime() + '] '  + msg + '</li>');
+                });
+                
+                socket.on('register', msg => {
+                    $('#blah').prepend('<li>[' + getTime() + '] '  + msg + '</li>');
+                });
+            </script>
+        </head>
+	    <body>
+	        <h2>yeeehh</h2>
+	        <ul id="blah"></ul>
+        </body>
+	</html>
+	`;
 });
 
 router.post('/register', (ctx, next) => {
@@ -63,11 +101,17 @@ router.post('/register', (ctx, next) => {
             });
         });
     }
+    else if(auth.password !== auth.passwordrepeat) {
+        return ctx.body = {
+            success: false,
+            error: "Passwords don't match."
+        };
+    }
     else {
         console.log("register failed");
         return ctx.body = {
             success: false,
-            error: "register failed"
+            error: "Please fill all Fields."
         }
     }
 });
@@ -92,9 +136,17 @@ router.post('/login', (ctx, next) => {
                 session: "",
                 data: "",
                 success: false,
-                error: "wrong password / user doesn't exist"
+                error: "No user found."
             };
             return;
+        }
+
+        if(user.banned){
+            return ctx.body = {
+                banned: true,
+                success: false,
+                error: "You are banned."
+            };
         }
 
         console.log("User found for '" + auth.username + "' '" + auth.password + "'");
@@ -144,14 +196,25 @@ app.use(router.allowedMethods());
 
 let http = app.listen(5000);
 
-/* Maybe for laterrrrr
+// Maybe for laterrrrr
 const io = socketio.listen(http);
 
 io.on('connection', socket => {
     socket.emit('hi', 'test');
-    socket.on('hi', data => {
-        console.log(data);
+
+    socket.on('startup', () => {
+        console.log("a Game started!");
+    });
+
+    socket.on('login', username => {
+        io.emit('login', username + ' just went online!');
+    });
+
+    socket.on('register', username => {
+        io.emit('register', username + ' just registered!');
     });
 });
 
-*/
+setInterval(() => {
+    io.emit('annonuce', 'Some fancy announcement !!!!');
+}, 30000);

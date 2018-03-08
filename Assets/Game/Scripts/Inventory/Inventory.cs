@@ -16,6 +16,14 @@ namespace Game
         }
         #endregion
 
+        private void Start()
+        {
+            LoginHandler.instance.HandleEvent("item", (itemData) =>
+            {
+                Add(JsonUtility.FromJson<ItemData>(itemData.ToString()));
+            });
+        }
+
         public delegate void OnItemChanged();
         public OnItemChanged onItemChangedCallback;
 

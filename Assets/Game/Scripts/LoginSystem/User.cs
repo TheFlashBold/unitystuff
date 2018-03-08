@@ -37,7 +37,7 @@ public class User {
 
     public void Save()
     {
-        LoginHandler.instance.RunCoroutine(SaveData());
+        LoginHandler.RunCoroutine(SaveData());
     }
 
     IEnumerator SaveData()
