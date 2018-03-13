@@ -4,6 +4,15 @@ const md5 = require('md5');
 const Promise = require('bluebird');
 const uuidv1 = require('uuid/v1');
 const socketio = require('socket.io');
+const crypto = require('crypto');
+
+/*
+const hash = crypto.createHash('sha512');
+hash.update("password");
+console.log(hash.digest('base64'));
+*/
+
+const version = "V1.3";
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/unitybackend');
@@ -16,6 +25,9 @@ const UserModel = mongoose.model('user', {
     password: {
         type: String,
         required: true
+    },
+    salt: {
+        type: String
     },
     session: {
         type: String
@@ -34,14 +46,13 @@ const UserModel = mongoose.model('user', {
     }
 });
 
-
 let app = new Koa();
 let router = new Router();
 
 const koaBody = require('koa-body');
 
 router.get('/', (ctx, next) => {
-	ctx.body = `
+    ctx.body = `
 	<html>
         <head>
             <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -78,9 +89,9 @@ router.get('/', (ctx, next) => {
 
 router.post('/register', (ctx, next) => {
     let auth = ctx.request.body;
-    if(auth.username && auth.password === auth.passwordrepeat){
+    if (auth.username && auth.password === auth.passwordrepeat) {
         return UserModel.findOne({username: auth.username, password: auth.password}).exec().then(existingUser => {
-            if(existingUser){
+            if (existingUser) {
                 return ctx.body = {
                     success: false,
                     error: "User already exists"
@@ -101,7 +112,7 @@ router.post('/register', (ctx, next) => {
             });
         });
     }
-    else if(auth.password !== auth.passwordrepeat) {
+    else if (auth.password !== auth.passwordrepeat) {
         return ctx.body = {
             success: false,
             error: "Passwords don't match."
@@ -117,19 +128,28 @@ router.post('/register', (ctx, next) => {
 });
 
 router.post('/login', (ctx, next) => {
-	let auth = ctx.request.body;
+    let auth = ctx.request.body;
 
-	let query = {
-	    username: auth.username,
+    if(!auth.version || auth.version !== version){
+        return ctx.body = {
+            success: false,
+            error: "Your version is outdated!"
+        };
+    }
+
+    let query = {
+        username: auth.username,
         password: auth.password
-	};
+    };
 
-	if(auth.project){
-	    query.project = auth.project;
+    console.log(auth);
+
+    if (auth.project) {
+        query.project = auth.project;
     }
 
     return UserModel.findOne(query).exec().then(user => {
-        if(!user){
+        if (!user) {
             console.log("No user found for '" + auth.username + "' '" + auth.password + "'");
             ctx.body = {
                 id: "",
@@ -141,7 +161,7 @@ router.post('/login', (ctx, next) => {
             return;
         }
 
-        if(user.banned){
+        if (user.banned) {
             return ctx.body = {
                 banned: true,
                 success: false,
@@ -165,9 +185,9 @@ router.post('/login', (ctx, next) => {
 
 router.post('/save', (ctx, next) => {
     let auth = ctx.request.body;
-    if(auth.id && auth.session){
+    if (auth.id && auth.session) {
         return UserModel.findOne({_id: mongoose.Types.ObjectId(auth.id), session: auth.session}).exec().then(user => {
-            if(user){
+            if (user) {
                 user.set('data', JSON.parse(auth.data));
                 user.markModified('data');
                 user.save();
@@ -214,7 +234,3 @@ io.on('connection', socket => {
         io.emit('register', username + ' just registered!');
     });
 });
-
-setInterval(() => {
-    io.emit('annonuce', 'Some fancy announcement !!!!');
-}, 30000);

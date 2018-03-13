@@ -259,12 +259,6 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="Photon3Unity3D">
-      <HintPath>Assets/314 Arts/MarsFPSKit/Plugins/Photon3Unity3D.dll</HintPath>
-    </Reference>
-    <Reference Include="websocket-sharp">
-      <HintPath>Assets/314 Arts/MarsFPSKit/Plugins/WebSocket/websocket-sharp.dll</HintPath>
-    </Reference>
     <Reference Include="AssetStoreTools">
       <HintPath>Assets/AssetStoreTools/Editor/AssetStoreTools.dll</HintPath>
     </Reference>
@@ -312,70 +306,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\CustomTypes.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Enums.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Extensions.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\FriendInfo.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\GizmoType.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\LoadbalancingPeer.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\NetworkingPeer.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\PhotonClasses.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\PhotonHandler.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\PhotonLagSimulationGui.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\PhotonNetwork.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\PhotonPlayer.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\PhotonStatsGui.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\PhotonStreamQueue.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\PhotonView.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\PingCloudRegions.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Room.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\RoomInfo.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\RPC.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\ServerSettings.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\SocketUdp.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\SocketWebTcp.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonAnimatorView.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonRigidbody2DView.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonRigidbodyView.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformView.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewPositionControl.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewPositionModel.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewRotationControl.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewRotationModel.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewScaleControl.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewScaleModel.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonLoadbalancingApi\Extensions.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonLoadbalancingApi\FriendInfo.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonLoadbalancingApi\LoadBalancingClient.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonLoadbalancingApi\LoadBalancingPeer.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonLoadbalancingApi\Player.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonLoadbalancingApi\Room.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonLoadbalancingApi\RoomInfo.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonLoadbalancingApi\WebRpc.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\AudioVoice.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\ObjectPool.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\OpusCodec.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\Bandwidth.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\Channels.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\Complexity.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\Delay.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\ForceChannels.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\OpusApplicationType.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\OpusCtlGetRequest.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\OpusCtlSetRequest.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\OpusStatusCode.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\SamplingRate.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\Enums\SignalHint.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\OpusDecoder.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\OpusEncoder.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\OpusException.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\POpusCodec\OpusWrapper.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Core\VoiceClient.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\LoadBalancingFrontend.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Platforms\Unity\AudioClipWrapper.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Platforms\Unity\AudioStreamPlayer.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\Platforms\Unity\MicWrapper.cs" />
-    <Compile Include="Assets\314 Arts\MarsFPSKit\Plugins\WebSocket\WebSocket.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\PUNVoice\Scripts\PhotonVoiceHandler.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\PUNVoice\Scripts\PhotonVoiceNetwork.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\PUNVoice\Scripts\PhotonVoiceRecorder.cs" />
@@ -404,6 +334,7 @@
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Game\Kit_MapInformation.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Game\Kit_PlayerModelInformation.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Game\Kit_RegionInformation.cs" />
+    <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Game\Kit_VoiceInformation.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Game\Kit_WeaponInformation.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\GameLogic\AFKLimit\Kit_AfkLimitBase.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\GameLogic\AFKLimit\Kit_AfkLimitSimple.cs" />
@@ -417,6 +348,8 @@
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\GameLogic\Kit_IngameMain.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\GameLogic\Kit_PlayerSpawn.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\GameLogic\Kit_SceneSyncer.cs" />
+    <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\GameLogic\Leveling\Kit_LevelingBase.cs" />
+    <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\GameLogic\Leveling\Kit_LevelingPlayerPrefs.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\GameLogic\PingLimit\Kit_PingLimitBase.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\GameLogic\PingLimit\Kit_PingLimiterSimple.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\GameLogic\PingLimit\Kit_PingLimitUIBase.cs" />
@@ -438,6 +371,8 @@
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\HUD\Kit_PlayerNameDefault.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\HUD\Kit_PlayerNameUIBase.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\HUD\Kit_TeamDeathmatchHUD.cs" />
+    <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Input\Kit_DefaultInputManager.cs" />
+    <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Input\Kit_InputManagerBase.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Kit_PlayerBehaviour.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Mouse Look\Kit_BasicMouseLook.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Mouse Look\Kit_MouseLookBase.cs" />
@@ -454,6 +389,8 @@
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Vitals\Kit_PlayerDamageMultiplier.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Vitals\Kit_SimpleVitals.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Vitals\Kit_VitalsBase.cs" />
+    <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Voice\Kit_ModernVoiceManager.cs" />
+    <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Voice\Kit_VoiceManagerBase.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Weapons\Kit_AttachmentAimOverride.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Weapons\Kit_AttachmentBehaviour.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\Player\Weapons\Kit_AttachmentDisableMuzzleFlash.cs" />
@@ -483,6 +420,8 @@
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\UI\Kit_LoginSimple.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\UI\Kit_MainMenu.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\UI\Kit_OptionsMenu.cs" />
+    <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\UI\Leveling\Kit_LevelingUIBase.cs" />
+    <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\UI\Leveling\Kit_SimpleLevelingUI.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\UI\Loadout Menu\Kit_LoadoutBase.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\UI\Loadout Menu\Kit_LoadoutDefault.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Scripts\UI\Loadout Menu\Kit_LoadoutIKHelper.cs" />
@@ -554,6 +493,9 @@
     <Compile Include="Assets\314 Arts\MarsFPSKit\Unity Technologies\PostProcessing\Runtime\Utils\GraphicsUtils.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Unity Technologies\PostProcessing\Runtime\Utils\MaterialFactory.cs" />
     <Compile Include="Assets\314 Arts\MarsFPSKit\Unity Technologies\PostProcessing\Runtime\Utils\RenderTextureFactory.cs" />
+    <Compile Include="Assets\Game\Scripts\AttachmentSystem\Attachment.cs" />
+    <Compile Include="Assets\Game\Scripts\AttachmentSystem\MountingPoint.cs" />
+    <Compile Include="Assets\Game\Scripts\ControllerTest.cs" />
     <Compile Include="Assets\Game\Scripts\Health.cs" />
     <Compile Include="Assets\Game\Scripts\Inventory\CraftingReceipt.cs" />
     <Compile Include="Assets\Game\Scripts\Inventory\Inventory.cs" />
@@ -567,12 +509,6 @@
   <ItemGroup>
     <None Include="Assets\314 Arts\MarsFPSKit\PUNVoice\changelog.txt" />
     <None Include="Assets\314 Arts\MarsFPSKit\PUNVoice\readme.txt" />
-    <None Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\changelog.txt" />
-    <None Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\link.xml" />
-    <None Include="Assets\314 Arts\MarsFPSKit\Photon Unity Networking\readme.txt" />
-    <None Include="Assets\314 Arts\MarsFPSKit\Plugins\Photon3Unity3D.xml" />
-    <None Include="Assets\314 Arts\MarsFPSKit\Plugins\PhotonVoiceApi\readme.txt" />
-    <None Include="Assets\314 Arts\MarsFPSKit\Plugins\release_history.txt" />
     <None Include="Assets\314 Arts\MarsFPSKit\Unity Technologies\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />
     <None Include="Assets\314 Arts\MarsFPSKit\Unity Technologies\PostProcessing\Editor Resources\Monitors\HistogramRender.shader" />
     <None Include="Assets\314 Arts\MarsFPSKit\Unity Technologies\PostProcessing\Editor Resources\Monitors\ParadeRender.shader" />

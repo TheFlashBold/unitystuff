@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Security.Cryptography;
 
 using Quobject.SocketIoClientDotNet.Client;
 
@@ -53,13 +55,15 @@ namespace TheFlashBold.LoginSystem
         public bool success;
         public string error;
     }
+    
     #endregion
 
     public class LoginHandler : MonoBehaviour
     {
-
         public string BackendUrl = "https://login.0zn.ch";
         public string Project = "default";
+
+        private string Version = "V1.3";
 
         public LoginComponents LoginComponents;
         public RegisterComponents RegisterComponents;
@@ -137,9 +141,9 @@ namespace TheFlashBold.LoginSystem
         {
             WWWForm form = new WWWForm();
             form.AddField("username", username);
-            form.AddField("password", md5(password));
+            form.AddField("password", getHash(password));
+            form.AddField("passwordrepeat", getHash(passwordrepeat));
             form.AddField("project", Project);
-            form.AddField("passwordrepeat", md5(passwordrepeat));
 
             OnRegisterStart();
 
@@ -251,8 +255,9 @@ namespace TheFlashBold.LoginSystem
         {
             WWWForm form = new WWWForm();
             form.AddField("username", username);
-            form.AddField("password", md5(password));
+            form.AddField("password", getHash(password));
             form.AddField("project", Project);
+            form.AddField("version", Version);
 
             OnLoginStart();
 
@@ -269,6 +274,7 @@ namespace TheFlashBold.LoginSystem
                 {
                     try
                     {
+                        Debug.Log(www.downloadHandler.text);
                         LoginResponse response = JsonUtility.FromJson<LoginResponse>(www.downloadHandler.text);
                         if (response.success && !response.banned)
                         {
@@ -314,6 +320,8 @@ namespace TheFlashBold.LoginSystem
             CurrentUser.Save();
 
             EmitEvent("login", LoginComponents.UsernameInput.text);
+
+            SceneManager.LoadScene(1);
         }
 
         /// <summary>
@@ -323,7 +331,7 @@ namespace TheFlashBold.LoginSystem
         private void OnLoginFailure(string error, LoginResponse response, UnityWebRequest www)
         {
             LoginComponents.Text.text = error;
-            Debug.Log("wrong password");
+            Debug.Log("Login Error: " + error);
         }
 
         /// <summary>
@@ -354,26 +362,16 @@ namespace TheFlashBold.LoginSystem
 
         #region Utils
         /// <summary>
-        /// Generates MD5 from provided string
+        /// Hash password with SHA512
         /// </summary>
-        /// <param name="strToEncrypt"></param>
+        /// <param name="password"></param>
         /// <returns></returns>
-        public string md5(string strToEncrypt)
+        public string getHash(string password)
         {
             System.Text.UTF8Encoding ue = new System.Text.UTF8Encoding();
-            byte[] bytes = ue.GetBytes(strToEncrypt);
-
-            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            byte[] hashBytes = md5.ComputeHash(bytes);
-
-            string hashString = "";
-
-            for (int i = 0; i < hashBytes.Length; i++)
-            {
-                hashString += System.Convert.ToString(hashBytes[i], 16).PadLeft(2, '0');
-            }
-
-            return hashString.PadLeft(32, '0');
+            var alg = SHA512.Create();
+            alg.ComputeHash(ue.GetBytes(password));
+            return System.Convert.ToBase64String(alg.Hash);
         }
         /// <summary>
         /// Crude invoke Coroutine form non Monobehaviour-Class hack :)
